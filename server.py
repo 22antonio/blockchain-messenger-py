@@ -24,13 +24,21 @@ try:
         displayMessage = displayMessage.encode()
         connection.send(displayMessage)
         print('message has been sent...')
+
+        displayMessage = displayMessage.decode()
+        if 'close connection' in displayMessage.lower():
+            print('connection is being closed')
+            x.close()
+            break
+        
         incomingMessage = connection.recv(1024)
         incomingMessage = incomingMessage.decode()
         print('Client:', incomingMessage)
-        if incomingMessage.lower() is 'close connection':
-            x.shutdown()
-
-    x.close()
+        if 'close connection' in incomingMessage.lower():
+            print('connection is being closed')
+            x.close()
+            break
 except Exception as e:
     print('Something went wrong')
-    Print('Exception from server.py', e)
+    print('Exception type', type(e))
+    print('Exception from server.py', e)
