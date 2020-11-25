@@ -20,17 +20,22 @@ try:
     print(address, 'has connected to the server and is now online...')
 
     while 1:
+        # asks for input to send message to client
+        # encodes and sends message
         displayMessage = input(str('>>'))
         displayMessage = displayMessage.encode()
         connection.send(displayMessage)
         print('message has been sent...')
 
+        # decodes message and checks if server wants to end connection
         displayMessage = displayMessage.decode()
         if 'close connection' in displayMessage.lower():
             print('connection is being closed')
             x.close()
             break
-        
+
+        # recieve message, decode message, display message
+        # check to see if message needs to be decoded
         incomingMessage = connection.recv(1024)
         incomingMessage = incomingMessage.decode()
         print('Client:', incomingMessage)

@@ -11,6 +11,8 @@ try:
     print('connected to chat server')
 
     while 1:
+        # recieving messagem, decoding message, check if wants to closed
+        # displays message
         incomingMessage = x.recv(1024)
         incomingMessage = incomingMessage.decode()
         if 'close connection' in incomingMessage.lower():
@@ -19,11 +21,14 @@ try:
             break
         print('Server:', incomingMessage)
 
+        # asks for input to send a message, encodes message
+        # sends message
         message = input(str('>>'))
         message = message.encode()
         x.send(message)
         print('message has been sent...')
-        
+
+        # decodes message to see if client wants to end connection
         message = message.decode()
         if 'close connection' in message.lower():
             print('connection is being closed')
