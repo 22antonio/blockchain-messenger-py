@@ -11,7 +11,7 @@ class Block(object):
         self.transactions = transactions
         self.timestamp = timestamp or time.time()
 
-    @property
+
     def get_block_hash(self):
         block_string = "{}{}{}{}{}".format(self.index, self.proof, self.previous_hash, self.transactions, self.timestamp)
         return hashlib.sha256(block_string.encode()).hexdigest()
@@ -28,7 +28,7 @@ class BlockChain(object):
         self.nodes = set()
         self.create_genesis_block()
 
-    @property
+
     def get_serialized_chain(self):
         return [vars(block) for block in self.chain]
 
@@ -47,8 +47,8 @@ class BlockChain(object):
         self.chain.append(block)
         return block
 
-    @staticmethod
-    def is_valid_block(block, previous_block):
+
+    def is_valid_block(self, block, previous_block):
         if previous_block.index + 1 != block.index:
             return False
 
@@ -71,13 +71,13 @@ class BlockChain(object):
         })
         return True
 
-    @staticmethod
+
     def is_valid_transaction():
         # Not Implemented
         pass
 
-    @staticmethod
-    def create_proof_of_work(previous_proof):
+
+    def create_proof_of_work(self, previous_proof):
         """
         Generate "Proof Of Work"
         A very simple `Proof of Work` Algorithm -
@@ -89,11 +89,11 @@ class BlockChain(object):
 
         return proof
 
-    @staticmethod
+
     def is_valid_proof(proof, previous_proof):
         return (proof + previous_proof) % 7 == 0
 
-    @property
+
     def get_last_block(self):
         return self.chain[-1]
 
@@ -125,7 +125,7 @@ class BlockChain(object):
             amount=1,
         )
 
-        last_block = self.get_last_block
+        last_block = self.get_last_block()
 
         last_proof = last_block.proof
         proof = self.create_proof_of_work(last_proof)
@@ -139,8 +139,8 @@ class BlockChain(object):
         self.nodes.add(address)
         return True
 
-    @staticmethod
-    def get_block_object_from_block_data(block_data):
+
+    def get_block_object_from_block_data(self, block_data):
         return Block(
             block_data['index'],
             block_data['proof'],
@@ -149,14 +149,16 @@ class BlockChain(object):
             timestamp=block_data['timestamp']
         )
 
-def main():
+if __name__ == '__main__':
     blockchain = BlockChain()
 
     print(">>>>> Before Mining...")
-    print('[index - proof - previous hash - trasnactions(list) - timestamp]')
     print(blockchain.chain)
 
-    last_block = blockchain.get_last_block
+    blockchain_copy = blockchain
+    print('blockchain copy', blockchain_copy.chain)
+
+    last_block = blockchain.get_last_block()
     last_proof = last_block.proof
     proof = blockchain.create_proof_of_work(last_proof)
 
@@ -174,5 +176,3 @@ def main():
 
     print(">>>>> After Mining...")
     print(blockchain.chain)
-
-main()
