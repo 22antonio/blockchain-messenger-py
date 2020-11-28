@@ -54,10 +54,13 @@ SERVER.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
 SERVER.bind(ADDR)
 
 if __name__ == "__main__":
+    # setting up the connection
     SERVER.listen(5)
     print("Hostname", socket.gethostname())
     print("Waiting for connection...")
     ACCEPT_THREAD = Thread(target=accept_incoming_connections)
     ACCEPT_THREAD.start()
     ACCEPT_THREAD.join()
+
+    # closing out server
     SERVER.close()
